@@ -307,7 +307,7 @@ To restrict access to certain routes based on the user’s role, we need to crea
 
 **📄 File: `src/components/ProtectedRoute.jsx`
 
-```jsx
+``` jsx
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext'; // adjust path if needed
@@ -329,6 +329,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
 };
 
 export default ProtectedRoute;
+
 ```
 
 How It Works:
