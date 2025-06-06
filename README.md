@@ -30,9 +30,11 @@ Create a simple home/landing page visible to all users.
 ![alt text](image-1.png)
 
 ## 🧾 Step 3: Register Component – RegisterComponent
-📄 File: src/components/RegisterComponent.jsx
 
-```import React, { useState } from 'react';
+📄 File: `src/components/RegisterComponent.jsx`
+
+```javascript
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -134,6 +136,8 @@ const RegisterComponent = () => {
 };
 
 export default RegisterComponent;
+
+
 ### 🔐 Step 4: Why Context is Needed
 
 Context is used because after login, the state needs to persist globally, and React alone doesn’t remember authentication unless it’s passed through context.
@@ -187,3 +191,37 @@ const AuthProvider = ({ children }) => {
 
 export { AuthContext, AuthProvider };
 
+```javascript
+🔐 Step 5: Protecting Routes with ProtectedRoute Component
+To restrict access to certain routes based on the user’s role, we need to create a ProtectedRoute component. This component will check if the user is logged in and whether they have the required role to access a particular page. If not, they will be redirected to either the login page or a "Not Authorized" page.
+
+📄 File: src/components/ProtectedRoute.jsx
+
+
+import React, { useContext } from 'react';
+import { Navigate } from 'react-router-dom';
+import { AuthContext } from './AuthContext'; // adjust path if needed
+
+const ProtectedRoute = ({ allowedRoles, children }) => {
+  const { user } = useContext(AuthContext);
+
+  if (!user) {
+    // Not logged in
+    return <Navigate to="/login" replace />;
+  }
+
+  if (!allowedRoles.includes(user.role)) {
+    // Role not allowed
+    return <Navigate to="/not-authorized" replace />;
+  }
+
+  return children;
+};
+
+export default ProtectedRoute;
+How It Works:
+Login Check: The component first checks if the user is logged in by looking at the user object from the AuthContext. If no user is found, the component redirects the user to the /login page.
+
+Role-Based Check: If the user is logged in but their role doesn't match the allowedRoles array, they are redirected to a /not-authorized page.
+
+Children Rendering: If the user is logged in and has the correct role, it renders the children components (the protected content).
