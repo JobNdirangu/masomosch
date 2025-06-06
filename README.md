@@ -24,15 +24,15 @@ cd masomo-school
 npm install axios react-router-dom bootstrap jwt-decode
 
 
-
-## Step 2: Create a Landing Page – HomeComponent
-Create a file: src/components/HomeComponent.jsx
+## 🌐 Step 2: Create the Landing Page – HomeComponent
+📄 File: src/components/HomeComponent.jsx
+Create a simple home/landing page visible to all users.
 ![alt text](image-1.png)
 
 ## 🧾 Step 3: Register Component – RegisterComponent
-Path: src/components/RegisterComponent.jsx
+📄 File: src/components/RegisterComponent.jsx
 
-import React, { useState } from 'react';
+```import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -133,4 +133,58 @@ const RegisterComponent = () => {
   );
 };
 
-export default RegisterComponent;
+export default RegisterComponent;```
+
+### 🔐 Step 4: Why Context is Needed
+Context is used because after login, the state needs to persist globally, and React alone doesn’t remember authentication unless it’s passed through context.
+
+📄 Create Context File: src/context/AuthContext.jsx
+```import { jwtDecode } from 'jwt-decode';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const AuthContext = createContext();
+
+const AuthProvider = ({ children }) => {
+    const navigate = useNavigate(); 
+
+    // Initialize state from localStorage
+    const [token, setToken] = useState(() => localStorage.getItem('token') || '');
+    const [user, setUser] = useState(() =>JSON.parse(localStorage.getItem('user') || 'null'))
+
+
+    // logout function//using a callback
+    const logout = useCallback(() => {
+        localStorage.clear();
+        setToken('');
+        setUser(null);
+        navigate('/login'); 
+    }, [navigate]);
+
+    // check if the token is expired
+    useEffect(() => {
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                const isExpired = decoded.exp * 1000 < Date.now();
+
+                if (isExpired) {
+                    // console.log("Token expired, logging out.");
+                    logout();
+                }
+            } catch (error) {
+                // console.log("Invalid token format.");
+                logout();
+            }
+        }
+    }, [token, logout]);
+
+  return (
+    <AuthContext.Provider value={{ token, user, logout,setToken,setUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export {AuthContext,AuthProvider}```
+
