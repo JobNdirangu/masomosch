@@ -16,12 +16,6 @@ This project is a **school management system** built using **React** for the fro
 
 ## 🧱 Step 1: Initialize the Project
 
-
-
-
-
-## 🧱 Step 1: Initialize the Project
-
 1. Create a new React project and install required dependencies:
 
 npx create-react-app@latest masomo-school
@@ -29,7 +23,7 @@ cd masomo-school
 
 npm install axios react-router-dom bootstrap jwt-decode
 
----
+
 
 ## Step 2: Create a Landing Page – HomeComponent
 Create a file: src/components/HomeComponent.jsx
