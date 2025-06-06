@@ -21,3 +21,4 @@ npm install axios react-router-dom bootstrap jwt-decode
 ## 🧱 Step 1: Initialize the Project
 ## Step 2: Create a Landing Page – HomeComponent
 Create a file: src/components/HomeComponent.jsx
+![alt text](image-1.png)
