@@ -30,6 +30,7 @@ Create a simple home/landing page visible to all users.
 ![alt text](image-1.png)
 
 ## 🧾 Step 3: Register Component – RegisterComponent
+![alt text](image-2.png)
 
 📄 File: `src/components/RegisterComponent.jsx`
 
@@ -135,10 +136,14 @@ const RegisterComponent = () => {
   );
 };
 
-export default RegisterComponent;
+export default RegisterComponent;```
 
+## 🧾 Step 4: Login Component – LoginComponent
+![alt text](image-3.png)
 
-### 🔐 Step 4: Why Context is Needed
+📄 File: `src/components/LoginComponent.jsx`
+
+### 🔐 Step 5: Why Context is Needed
 
 Context is used because after login, the state needs to persist globally, and React alone doesn’t remember authentication unless it’s passed through context.
 
@@ -189,7 +194,7 @@ const AuthProvider = ({ children }) => {
     );
 };
 
-export { AuthContext, AuthProvider };
+export { AuthContext, AuthProvider };``
 
 ```javascript
 🔐 Step 5: Protecting Routes with ProtectedRoute Component
@@ -197,7 +202,7 @@ To restrict access to certain routes based on the user’s role, we need to crea
 
 📄 File: src/components/ProtectedRoute.jsx
 
-
+```javascript
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 import { AuthContext } from './AuthContext'; // adjust path if needed
@@ -218,7 +223,8 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   return children;
 };
 
-export default ProtectedRoute;
+export default ProtectedRoute;```
+
 How It Works:
 Login Check: The component first checks if the user is logged in by looking at the user object from the AuthContext. If no user is found, the component redirects the user to the /login page.
 
