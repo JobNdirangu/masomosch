@@ -133,13 +133,15 @@ const RegisterComponent = () => {
   );
 };
 
-export default RegisterComponent;```
-
+export default RegisterComponent;
 ### 🔐 Step 4: Why Context is Needed
+
 Context is used because after login, the state needs to persist globally, and React alone doesn’t remember authentication unless it’s passed through context.
 
-📄 Create Context File: src/context/AuthContext.jsx
-```import { jwtDecode } from 'jwt-decode';
+📄 **Create Context File:** `src/context/AuthContext.jsx`
+
+```javascript
+import { jwtDecode } from 'jwt-decode';
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -150,10 +152,9 @@ const AuthProvider = ({ children }) => {
 
     // Initialize state from localStorage
     const [token, setToken] = useState(() => localStorage.getItem('token') || '');
-    const [user, setUser] = useState(() =>JSON.parse(localStorage.getItem('user') || 'null'))
+    const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user') || 'null'));
 
-
-    // logout function//using a callback
+    // Logout function using a callback
     const logout = useCallback(() => {
         localStorage.clear();
         setToken('');
@@ -161,7 +162,7 @@ const AuthProvider = ({ children }) => {
         navigate('/login'); 
     }, [navigate]);
 
-    // check if the token is expired
+    // Check if the token is expired
     useEffect(() => {
         if (token) {
             try {
@@ -169,22 +170,20 @@ const AuthProvider = ({ children }) => {
                 const isExpired = decoded.exp * 1000 < Date.now();
 
                 if (isExpired) {
-                    // console.log("Token expired, logging out.");
                     logout();
                 }
             } catch (error) {
-                // console.log("Invalid token format.");
                 logout();
             }
         }
     }, [token, logout]);
 
-  return (
-    <AuthContext.Provider value={{ token, user, logout,setToken,setUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    return (
+        <AuthContext.Provider value={{ token, user, logout, setToken, setUser }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
-export {AuthContext,AuthProvider}```
+export { AuthContext, AuthProvider };
 
