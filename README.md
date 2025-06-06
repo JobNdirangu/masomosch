@@ -6,17 +6,7 @@ This project is a **school management system** built using React for the fronten
 
 ## 📁 Project Structure Overview
 
-src/
-├── components/
-│ ├── admin/
-│ ├── teacher/
-│ ├── parent/
-│ └── LoginComponent.jsx
-├── context/
-│ ├── AuthContext.jsx
-│ └── ProtectedRoute.jsx
-├── App.js
-├── index.js
+![alt text](image.png)
 
 ## 🧱 Step 1: Initialize the Project
 
