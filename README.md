@@ -338,3 +338,228 @@ Login Check: The component first checks if the user is logged in by looking at t
 Role-Based Check: If the user is logged in but their role doesn't match the allowedRoles array, they are redirected to a /not-authorized page.
 
 Children Rendering: If the user is logged in and has the correct role, it renders the children components (the protected content).
+
+### 🔐 Step 6: Protecting Routes implementation
+
+```jsx
+// import logo from './logo.svg';
+import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomeComponent from './components/HomeComponent';
+import LoginComponent from './components/LoginComponent';
+import NotFound from './components/NotFound';
+import NotAuthorized from './components/NotAuthorized';
+import RegisterComponent from './components/RegisterComponent';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './context/ProtectedRoute';
+import AdminLayout from './components/admin/AdminLayout';
+import Teachers from './components/admin/Teachers';
+import Parents from './components/admin/Parents';
+import Classes from './components/admin/Classes';
+import Student from './components/admin/Student';
+import AdminDashboard from './components/admin/AdminDashboard';
+
+
+function App() {
+  return (
+    <Router>
+      <AuthProvider>
+        <div className="App">
+          <header className="App-header">
+          </header>
+        </div>
+        <Routes>
+            <Route path='/' element={<HomeComponent/>}/>
+
+            {/* Admin Protected Routes */}
+            <Route path='/admin-dashboard' 
+                element={
+                  <ProtectedRoute allowedRoles={['admin']}>
+                    <AdminLayout/>
+                  </ProtectedRoute>
+                }>
+                <Route path='' element={<AdminDashboard />} />
+                <Route path='teachers' element={<Teachers />} />
+                <Route path='parents' element={<Parents />} />
+                <Route path='students' element={<Student />} />
+                <Route path='classes' element={<Classes />} />
+            </Route>
+            
+            <Route path='/login' element={<LoginComponent/>}/>
+            <Route path='/register' element={<RegisterComponent/>}/>
+
+            {/* defaults */}
+            <Route path='/not-authorized' element={<NotAuthorized/>}/>
+            <Route path='*' element={<NotFound/>}/>
+        </Routes>
+      </AuthProvider>
+    </Router>
+  );
+}
+
+export default App;
+```
+### 🔐 Step 7: Admin Components which includes the sidebar, navbar and main area
+the below image shows the dashboard
+![alt text](image-4.png)
+
+### 🔐 Step 8: Sidebar 
+```jsx
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+
+const SideBar = () => {
+  return (
+    <div className="bg-dark text-white d-flex flex-column p-3" style={{ minHeight: '100vh', width: '250px' }}>
+      <h4 className="text-center mb-4">
+        <i className="bi bi-speedometer2 me-2"></i>Admin Panel
+      </h4>
+      <ul className="nav nav-pills flex-column mb-auto">
+        <li className="nav-item">
+          <NavLink
+            to="/admin-dashboard"
+            end
+            className={({ isActive }) =>
+              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+            }
+          >
+            <i className="bi bi-grid me-2"></i> Dashboard
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/admin-dashboard/students"
+            className={({ isActive }) =>
+              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+            }
+          >
+            <i className="bi bi-person-lines-fill me-2"></i> Students
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/admin-dashboard/parents"
+            className={({ isActive }) =>
+              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+            }
+          >
+            <i className="bi bi-people-fill me-2"></i> Parents
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/admin-dashboard/teachers"
+            className={({ isActive }) =>
+              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+            }
+          >
+            <i className="bi bi-person-badge me-2"></i> Teachers
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/admin-dashboard/classes"
+            className={({ isActive }) =>
+              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+            }
+          >
+            <i className="bi bi-journal-bookmark me-2"></i> Classes
+          </NavLink>
+        </li>
+
+        <li>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              isActive ? 'nav-link bg-danger text-white fw-bold' : 'nav-link text-white'
+            }
+          >
+            <i className="bi bi-box-arrow-right me-2"></i> Logout
+          </NavLink>
+        </li>
+      </ul>
+
+      <hr />
+      <div className="text-center small">
+        <span className="text-light">© 2025 Masomo</span>
+      </div>
+    </div>
+  );
+};
+
+export default SideBar;
+```
+
+### 🔐 Step 9: Navbar
+```jsx
+import React, { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+const DashboardNavbar = () => {
+  // get the logged in user and the logout function using useContect hook from AuthContext
+  const { user, logout } = useContext(AuthContext);
+
+  return (
+    <nav className="navbar navbar-expand-lg bg-white shadow-sm px-4 py-2 mb-3 rounded">
+      <div className="container-fluid d-flex justify-content-between align-items-center">
+        <span className="navbar-brand fw-bold text-success fs-4">
+          <i className="bi bi-mortarboard-fill me-2"></i>
+          Masomo School
+        </span>
+
+        <div className="d-flex align-items-center">
+          <span className="me-3 text-muted">
+            <i className="bi bi-person-circle me-1"></i>
+            <strong>{user?.name}</strong> <small className="text-muted">({user?.role})</small>
+          </span>
+
+          <button className="btn btn-sm btn-outline-danger d-flex align-items-center" onClick={logout}>
+            <i className="bi bi-box-arrow-right me-1"></i> Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default DashboardNavbar;
+
+```
+
+### 🔐 Step 10: Admin Layout  
+Outlet from router is used to show the child components dynamically
+```jsx
+  import React from 'react';
+  import { Outlet } from 'react-router-dom';
+  import DashboardNavbar from '../DashboardNavbar';
+  import SideBar from './SideBar';
+
+  const AdminLayout = () => {
+    return (
+      <div className="d-flex">
+        <SideBar />
+
+        <div className="flex-grow-1">
+          <DashboardNavbar /> 
+
+          {/* Main area where the routed page content will be displayed */}
+          <main className="p-4">
+            {/* Outlet renders the matched child route’s element */}
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    );
+  };
+
+  export default AdminLayout;
+
+```

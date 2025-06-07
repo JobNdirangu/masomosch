@@ -46,7 +46,7 @@ const LoginComponent = () => {
         }
 
     } catch (error) {
-        console.log(error)
+        console.log(error.response)
       setLoading('');
       setError('Login failed. Please try again.');
     }

@@ -10,7 +10,10 @@ const AdminLayout = () => {
 
       <div className="flex-grow-1">
         <DashboardNavbar /> 
+
+        {/* Main area where the routed page content will be displayed */}
         <main className="p-4">
+          {/* Outlet renders the matched child route’s element */}
           <Outlet />
         </main>
       </div>
