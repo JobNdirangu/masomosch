@@ -36,3 +36,21 @@
     transform: rotate(360deg);
   }
 }
+
+.icon-circle {
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 50%;
+  display: inline-block;
+  font-size: 24px;
+}
+
+.hover-card {
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.hover-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+}

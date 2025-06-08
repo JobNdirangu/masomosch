@@ -33,55 +33,63 @@ const AdminDashboard = () => {
   }, []);
 
   return (
-    <div className="container my-4" >
-      <h2 className="text-center text-success mb-4">Admin Dashboard Overview</h2>
+    <div className="container my-2" >
+      <h2 className="text-center text-success mb-2">Admin Dashboard Overview</h2>
 
       <div className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         {/* Teachers */}
         <div className="col">
-          <div className="card shadow-lg border-primary rounded-3">
+          <div className="card h-100  shadow-lg rounded-4 bg-light hover-card">
             <div className="card-body text-center">
-              <i className="bi bi-person-lines-fill fs-1 text-primary"></i>
-              <h5 className="card-title mt-3 text-primary">Teachers</h5>
-              <h2 className="display-4 text-primary">{stats.totalTeachers}</h2>
+              <div className="icon-circle bg-primary text-white mb-3">
+                <i className="bi bi-person-lines-fill fs-3"></i>
+              </div>
+              <h6 className="text-muted">Teachers</h6>
+              <h2 className="fw-bold text-dark">{stats.totalTeachers}</h2>
             </div>
           </div>
         </div>
 
         {/* Students */}
         <div className="col">
-          <div className="card shadow-lg border-info rounded-3">
+          <div className="card h-100 shadow-lg rounded-4 bg-light hover-card">
             <div className="card-body text-center">
-              <i className="bi bi-mortarboard fs-1 text-info"></i>
-              <h5 className="card-title mt-3 text-info">Students</h5>
-              <h2 className="display-4 text-info">{stats.totalStudents}</h2>
+              <div className="icon-circle bg-info text-white mb-3">
+                <i className="bi bi-mortarboard fs-3"></i>
+              </div>
+              <h6 className="text-muted">Students</h6>
+              <h2 className="fw-bold text-dark">{stats.totalStudents}</h2>
             </div>
           </div>
         </div>
 
-        
-        {/* Classrooms */}
+        {/* Classes */}
         <div className="col">
-          <div className="card shadow-lg border-warning rounded-3">
+          <div className="card h-100 shadow-lg rounded-4 bg-light hover-card">
             <div className="card-body text-center">
-              <i className="bi bi-journal-bookmark fs-1 text-warning"></i>
-              <h5 className="card-title mt-3 text-warning">Classes</h5>
-              <h2 className="display-4 text-warning">{stats.totalClassrooms}</h2>
+              <div className="icon-circle bg-warning text-white mb-3">
+                <i className="bi bi-journal-bookmark fs-3"></i>
+              </div>
+              <h6 className="text-muted">Classes</h6>
+              <h2 className="fw-bold text-dark">{stats.totalClassrooms}</h2>
             </div>
           </div>
         </div>
 
         {/* Active Users */}
         <div className="col">
-          <div className="card shadow-lg border-success rounded-3">
+          <div className="card h-100 shadow-lg rounded-4 bg-light hover-card">
             <div className="card-body text-center">
-              <i className="bi bi-person-check-fill fs-1 text-success"></i>
-              <h5 className="card-title mt-3 text-success">Active Users</h5>
-              <h2 className="display-4 text-success">{stats.activeUsers}</h2>
+              <div className="icon-circle bg-success text-white mb-3">
+                <i className="bi bi-person-check-fill fs-3"></i>
+              </div>
+              <h6 className="text-muted">Active Users</h6>
+              <h2 className="fw-bold text-dark">{stats.activeUsers}</h2>
             </div>
           </div>
         </div>
       </div>
+
 
       {/* Recent Teachers */}
       <div className="mt-5">

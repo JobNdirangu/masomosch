@@ -22,7 +22,6 @@ const Parents = () => {
       const res = await axios.get('http://localhost:3000/api/parents/', authHeader);
 
       setParents(res.data);
-      toast.dismiss()
     } catch (err) {
       toast.dismiss();
       toast.error(err.response?.data?.message)
@@ -48,7 +47,7 @@ const Parents = () => {
   };
 
   const handleEdit = (parent) => {
-    navigate('/admin-dashboard/parent-edit', { state: { parent } });
+    navigate('/admin-dashboard/parent/edit', { state: { parent } });
   };
 
   return (
@@ -59,7 +58,7 @@ const Parents = () => {
       {/* Breadcrumbs */}
       <nav aria-label="breadcrumb" className="mb-3">
         <ol className="breadcrumb">
-          <li className="breadcrumb-item"><Link to="/admin-dashboard">Dashboard</Link></li>
+          <li className="breadcrumb-item fw-bold "><Link to="/admin-dashboard">Dashboard</Link></li>
           <li className="breadcrumb-item active" aria-current="page">Parents</li>
         </ol>
       </nav>
@@ -73,7 +72,7 @@ const Parents = () => {
           </h5>
           <button
               className="btn btn-success"
-              onClick={() => navigate('/admin-dashboard/parents-add')}
+              onClick={() => navigate('/admin-dashboard/parents/add')}
             >
             <i className="bi bi-plus-circle me-2"></i>
             Add Parent

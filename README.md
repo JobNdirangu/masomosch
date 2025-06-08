@@ -709,6 +709,8 @@ export default Parents;
 
 ### Step 11: Parent Component  -ParentAdd component
 ![alt text](image-6.png)
+
+toast
 ![alt text](image-8.png)
 
 ```jsx
@@ -1013,3 +1015,4 @@ const ParentEdit = () => {
 export default ParentEdit;
 
 ```
+### Step 13: Teacher Component  
