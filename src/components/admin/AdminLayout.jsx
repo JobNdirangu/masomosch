@@ -12,7 +12,7 @@ const AdminLayout = () => {
         <DashboardNavbar /> 
 
         {/* Main area where the routed page content will be displayed */}
-        <main className="p-4">
+        <main className="p-4 vh-100" >
           {/* Outlet renders the matched child route’s element */}
           <Outlet />
         </main>

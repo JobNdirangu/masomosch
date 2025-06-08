@@ -20,6 +20,7 @@ const AuthProvider = ({ children }) => {
         navigate('/login'); 
     }, [navigate]);
 
+
     // check if the token is expired
     useEffect(() => {
         if (token) {
@@ -39,6 +40,7 @@ const AuthProvider = ({ children }) => {
     }, [token, logout]);
 
   return (
+    // the setToken and SetUser are needed for login to alert the change of state
     <AuthContext.Provider value={{ token, user, logout,setToken,setUser }}>
       {children}
     </AuthContext.Provider>

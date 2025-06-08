@@ -17,16 +17,15 @@ import Parents from './components/admin/Parents';
 import Classes from './components/admin/Classes';
 import Student from './components/admin/Student';
 import AdminDashboard from './components/admin/AdminDashboard';
+import ParentAdd from './components/admin/forms/ParentAdd';
+import ParentEdit from './components/admin/forms/ParentEdit';
 
 
 function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="App">
-          <header className="App-header">
-          </header>
-        </div>
+        
         <Routes>
             <Route path='/' element={<HomeComponent/>}/>
 
@@ -40,6 +39,8 @@ function App() {
                 <Route path='' element={<AdminDashboard />} />
                 <Route path='teachers' element={<Teachers />} />
                 <Route path='parents' element={<Parents />} />
+                <Route path='parents-add' element={<ParentAdd />} />
+                <Route path='parent-edit' element={<ParentEdit />} />
                 <Route path='students' element={<Student />} />
                 <Route path='classes' element={<Classes />} />
             </Route>

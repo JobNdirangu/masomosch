@@ -3,7 +3,13 @@ import { NavLink } from 'react-router-dom';
 
 const SideBar = () => {
   return (
-    <div className="bg-dark text-white d-flex flex-column p-3" style={{ minHeight: '100vh', width: '250px' }}>
+    <div
+        className="text-white d-flex flex-column p-3"
+        style={{
+          width: '250px',
+          background: 'linear-gradient(135deg,rgb(12, 79, 46),rgb(54, 66, 159))',
+        }}
+      >      
       <h4 className="text-center mb-4">
         <i className="bi bi-speedometer2 me-2"></i>Admin Panel
       </h4>
@@ -13,7 +19,7 @@ const SideBar = () => {
             to="/admin-dashboard"
             end
             className={({ isActive }) =>
-              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+              isActive ? 'nav-link bg-success text-white fw-bold' : 'nav-link text-white'
             }
           >
             <i className="bi bi-grid me-2"></i> Dashboard
@@ -24,7 +30,7 @@ const SideBar = () => {
           <NavLink
             to="/admin-dashboard/students"
             className={({ isActive }) =>
-              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+              isActive ? 'nav-link bg-success text-white fw-bold' : 'nav-link text-white'
             }
           >
             <i className="bi bi-person-lines-fill me-2"></i> Students
@@ -35,7 +41,7 @@ const SideBar = () => {
           <NavLink
             to="/admin-dashboard/parents"
             className={({ isActive }) =>
-              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+              isActive ? 'nav-link bg-success text-white fw-bold' : 'nav-link text-white'
             }
           >
             <i className="bi bi-people-fill me-2"></i> Parents
@@ -46,7 +52,7 @@ const SideBar = () => {
           <NavLink
             to="/admin-dashboard/teachers"
             className={({ isActive }) =>
-              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+              isActive ? 'nav-link bg-success text-white fw-bold' : 'nav-link text-white'
             }
           >
             <i className="bi bi-person-badge me-2"></i> Teachers
@@ -57,7 +63,7 @@ const SideBar = () => {
           <NavLink
             to="/admin-dashboard/classes"
             className={({ isActive }) =>
-              isActive ? 'nav-link bg-secondary text-white fw-bold' : 'nav-link text-white'
+              isActive ? 'nav-link bg-success text-white fw-bold' : 'nav-link text-white'
             }
           >
             <i className="bi bi-journal-bookmark me-2"></i> Classes

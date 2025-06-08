@@ -46,9 +46,13 @@ const LoginComponent = () => {
         }
 
     } catch (error) {
-        console.log(error.response)
+      console.log(error.response)
       setLoading('');
-      setError('Login failed. Please try again.');
+      if (error.response && error.response.status === 401) {
+        setError(error.response.data.message);
+      } else {
+        setError('Network or server error');
+      }
     }
   };
 

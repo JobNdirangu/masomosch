@@ -563,3 +563,453 @@ Outlet from router is used to show the child components dynamically
   export default AdminLayout;
 
 ```
+
+### Step 11: Parent Component  -List
+![alt text](image-5.png)
+
+
+```jsx
+  import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+// remeber to install react-toastify
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const Parents = () => {
+  const [parents, setParents] = useState([]);
+  const { token } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  // Authorization header for secure API requests
+  const authHeader = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  const fetchParents = async () => {
+    try {
+      toast.info('Loading parents...')
+      const res = await axios.get('http://localhost:3000/api/parents/', authHeader);
+
+      setParents(res.data);
+      toast.dismiss()
+    } catch (err) {
+      toast.dismiss();
+      toast.error(err.response?.data?.message)
+    }
+  };
+
+  useEffect(() => {
+    fetchParents();
+  }, []);
+    
+  const handleDelete = async (id) => {
+    if (window.confirm('Delete this parent?')) {
+      try {
+        toast.warning('deleting parent...')
+        await axios.delete(`http://localhost:3000/api/parents/${id}`, authHeader);
+        
+        fetchParents();
+      } catch (err) {
+        toast.dismiss();
+        toast.error(err.response?.data?.message || 'Error deleting parent')
+      }
+    }
+  };
+
+  const handleEdit = (parent) => {
+    navigate('/admin-dashboard/parent-edit', { state: { parent } });
+  };
+
+  return (
+    <div className="container mt-2">
+      {/* Toasts */}
+        <ToastContainer position="top-right" autoClose={3000} />
+
+      {/* Breadcrumbs */}
+      <nav aria-label="breadcrumb" className="mb-3">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item"><Link to="/admin-dashboard">Dashboard</Link></li>
+          <li className="breadcrumb-item active" aria-current="page">Parents</li>
+        </ol>
+      </nav>
+      
+      {/* card for parents */}
+      <div className="card p-4 shadow-sm">
+        <div className="d-flex justify-content-between align-items-center mb-3">
+          <h5 className="text-success mb-0">
+            <i className="bi bi-people-fill me-2"></i>
+            Parents List
+          </h5>
+          <button
+              className="btn btn-success"
+              onClick={() => navigate('/admin-dashboard/parents-add')}
+            >
+            <i className="bi bi-plus-circle me-2"></i>
+            Add Parent
+          </button>
+        </div>
+
+        {/* table */}
+        <div className="table-responsive"> 
+          {/* checking there is a parent */}
+          {parents.length === 0 ? (
+            <div className="alert alert-warning text-center mb-0">
+              <i className="bi bi-exclamation-circle me-2"></i>
+              No parents found.
+            </div>
+            ) : (
+              <table className="table table-striped table-hover table-bordered">
+                <thead className="table-success">
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {/* mapping */}
+                  {parents.map((p, index) => (
+                    <tr key={p._id}>
+                      <td>{index + 1}</td>
+                      <td>{p.name}</td>
+                      <td>{p.phone}</td>
+                      <td>{p.email}</td>
+                      <td>
+                        <button
+                          className="btn btn-sm btn-outline-primary me-2"
+                          onClick={() => handleEdit(p)}
+                        >
+                          <i className="bi bi-pencil-square"></i>
+                        </button>
+                        <button
+                          className="btn btn-sm btn-outline-danger"
+                          onClick={() => handleDelete(p._id)}
+                        >
+                          <i className="bi bi-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+          )}
+        </div>
+      </div>  
+    </div>
+  );
+};
+
+export default Parents;
+
+```
+
+### Step 11: Parent Component  -ParentAdd component
+![alt text](image-6.png)
+![alt text](image-8.png)
+
+```jsx
+import React, { useState, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../../../context/AuthContext';
+import { Link } from 'react-router-dom';
+// remember to install react-toastify
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+const ParentAdd = () => {
+  const { token } = useContext(AuthContext);
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [nationalId, setNationalId] = useState('');
+  const [address, setAddress] = useState('');
+
+  // Authorization header for secure API requests  
+  const authHeader = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // data json body
+    const data = { name, email, phone, nationalId, address };
+
+    try {
+      toast.info('Submitting...');
+      const res = await axios.post('http://localhost:3000/api/parents/', data, authHeader);
+
+      toast.dismiss();
+      toast.success(res.data.message || 'Parent added successfully!');
+
+      // Optionally clear form
+      setName('');
+      setEmail('');
+      setPhone('');
+      setNationalId('');
+      setAddress('');
+    } catch (err) {
+      toast.dismiss();
+      toast.error(err.response?.data?.message || 'Error submitting form');
+    }
+  };
+
+  return (
+    <div className="container mt-2">
+      {/* Toasts */}
+      <ToastContainer position="top-right" autoClose={5000} />
+
+      {/* Breadcrumbs */}
+      <nav aria-label="breadcrumb" className="mb-3">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item"><Link to="/admin-dashboard">Dashboard</Link></li>
+          <li className="breadcrumb-item"><Link to="/admin-dashboard/parents">Parents</Link></li>
+          <li className="breadcrumb-item active" aria-current="page">Add Parent</li>
+        </ol>
+      </nav>
+
+      <div className="card p-4 shadow-sm mb-4">
+        <h5 className="mb-4 text-success">
+          <span className="bi bi-people-fill me-2 text-success"></span>
+          Add New Parent
+        </h5>
+
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="National ID"
+                value={nationalId}
+                onChange={(e) => setNationalId(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-12 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-primary">
+            Save Parent
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default ParentAdd;
+
+
+```
+
+### Step 12: Parent Component  -ParentEdit component
+![alt text](image-7.png)
+
+```jsx
+import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AuthContext } from '../../../context/AuthContext';
+
+const ParentEdit = () => {    
+    // Declare state variables for the parent's details
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [nationalId, setNationalId] = useState('');
+    const [address, setAddress] = useState('');
+
+
+    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    //To receive data passed from the previous route  
+    const { state } = useLocation();
+    const parent = state?.parent;
+    
+    // Load initial data when the component mounts
+    useEffect(() => {
+        if (!parent) {
+        toast.error("No parent data provided");
+
+        // For programmatically navigating the user
+        navigate("/admin-dashboard/parents");
+        return
+        }
+    
+    // Set the form fields with the existing parent data
+    setName(parent.name || '');
+    setEmail(parent.email || '');
+    setPhone(parent.phone || '');
+    setNationalId(parent.nationalId || '');
+    setAddress(parent.address || '');
+  }, [parent, navigate]);
+
+  // Authorization header for secure API requests
+  const authHeader = {
+    headers: { Authorization: `Bearer ${token}` }
+  };
+
+  // on submit this function triggers   
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const data = { name, email, phone, nationalId, address };
+
+    try {
+      toast.info('Updating...');
+      // Send PUT request to update parent data
+      const res = await axios.put(`http://localhost:3000/api/parents/${parent._id}`,data,authHeader);
+      toast.dismiss();
+      toast.success(res.data.message || 'Parent updated successfully!');
+      navigate('/admin-dashboard/parents');
+    } catch (err) {
+      toast.dismiss();
+      toast.error(err.response?.data?.message);
+    }
+  };
+
+  return (
+    <div className="container mt-2">
+      <ToastContainer position="top-right" autoClose={5000} />
+
+      <nav aria-label="breadcrumb" className="mb-3">
+        <ol className="breadcrumb">
+          <li className="breadcrumb-item"><Link to="/admin-dashboard">Dashboard</Link></li>
+          <li className="breadcrumb-item"><Link to="/admin-dashboard/parents">Parents</Link></li>
+          <li className="breadcrumb-item active" aria-current="page">Edit Parent</li>
+        </ol>
+      </nav>
+
+      <div className="card p-4 shadow-sm mb-4">
+        <h5 className="mb-4 text-success">
+          <span className="bi bi-pencil-square me-2 text-success"></span>
+          Edit Parent
+        </h5>
+
+        <form onSubmit={handleSubmit}>
+          <div className="row">
+            <div className="col-md-6 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-md-6 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="National ID"
+                value={nationalId}
+                onChange={(e) => setNationalId(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="col-12 mb-3">
+              <textarea
+                className="form-control"
+                placeholder="Address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                rows="3"
+                required
+              />
+            </div>
+
+            <div className="col-12">
+                <button type="submit" className="btn btn-primary me-2">
+                    <i className="bi bi-save me-1"></i> Save Changes
+                </button>
+                
+                <Link to="/admin-dashboard/parents" className="btn btn-secondary">
+                    <i className="bi bi-x-circle me-1"></i> Cancel
+                </Link>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default ParentEdit;
+
+```
